@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const db = require("./models/index.js");
 
 const app = express();
 
@@ -29,6 +30,9 @@ app.delete("/delete/:somparam", function(req, res) {
   res.json(list);
 });
 
-app.listen(3000, function() {
-  console.log("server is up");
+db.sequelize.sync().then(function() {
+  app.listen(3000, function(err) {
+    if (err) console.log(err);
+    console.log("server is up");
+  });
 });
