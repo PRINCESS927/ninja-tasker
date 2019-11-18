@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const db = require("./models/index.js");
+const routes = require("./routes");
 
 const app = express();
 
@@ -10,29 +11,12 @@ app.use(express.static("./public"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-let list = ["get new friends", "execute old friends"];
-
-app.get("/home", function(req, res) {
-  res.render("home", { list: list });
-});
-
-app.post("/ninja", function(req, res) {
-  console.log(req.body.taskItem);
-  list.push(req.body.taskItem);
-  res.render("home.ejs", { list: list });
-});
-
-app.delete("/delete/:somparam", function(req, res) {
-  console.log(req.params.index);
-
-  list.splice(req.params.index, 1);
-
-  res.json(list);
-});
+//routing manager
+app.use(routes);
 
 db.sequelize.sync().then(function() {
   app.listen(3000, function(err) {
     if (err) console.log(err);
-    console.log("server is up");
+    console.log("That's what she said!!!");
   });
 });
